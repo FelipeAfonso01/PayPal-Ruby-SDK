@@ -2254,7 +2254,7 @@ module PayPal::SDK
         include RequestDataType
 
         def create()
-          path = "v1/payments/billing-agreements/"
+          path = "v1/billing/subscriptions/"
           response = api.post(path, self.to_hash, http_header)
           self.merge!(response)
           self.get_token(self.links)
@@ -2262,7 +2262,7 @@ module PayPal::SDK
         end
 
         def execute()
-          path = "v1/payments/billing-agreements/#{self.token}/agreement-execute"
+          path = "v1/billing/subscriptions/#{self.token}/agreement-execute"
           response = api.post(path, {}, http_header)
           self.merge!(response)
           success?
@@ -2271,14 +2271,14 @@ module PayPal::SDK
         class << self
           def find(resource_id)
             raise ArgumentError.new("id required") if resource_id.to_s.strip.empty?
-            path = "v1/payments/billing-agreements/#{resource_id}"
+            path = "v1/billing/subscriptions/#{resource_id}"
             self.new(api.get(path))
           end
         end
 
         def update(patch)
           patch = Patch.new(patch) unless patch.is_a? Patch
-          path = "v1/payments/billing-agreements/#{self.id}"
+          path = "v1/billing/subscriptions/#{self.id}"
           response = api.patch(path, [patch.to_hash], http_header)
           self.merge!(response)
           success?
@@ -2286,7 +2286,7 @@ module PayPal::SDK
 
         def suspend(agreement_state_descriptor)
           agreement_state_descriptor = AgreementStateDescriptor.new(agreement_state_descriptor) unless agreement_state_descriptor.is_a? AgreementStateDescriptor
-          path = "v1/payments/billing-agreements/#{self.id}/suspend"
+          path = "v1/billing/subscriptions/#{self.id}/suspend"
           response = api.post(path, agreement_state_descriptor.to_hash, http_header)
           self.merge!(response)
           success?
@@ -2294,7 +2294,7 @@ module PayPal::SDK
 
         def re_activate(agreement_state_descriptor)
           agreement_state_descriptor = AgreementStateDescriptor.new(agreement_state_descriptor) unless agreement_state_descriptor.is_a? AgreementStateDescriptor
-          path = "v1/payments/billing-agreements/#{self.id}/re-activate"
+          path = "v1/billing/subscriptions/#{self.id}/re-activate"
           response = api.post(path, agreement_state_descriptor.to_hash, http_header)
           self.merge!(response)
           success?
@@ -2302,7 +2302,7 @@ module PayPal::SDK
 
         def cancel(agreement_state_descriptor)
           agreement_state_descriptor = AgreementStateDescriptor.new(agreement_state_descriptor) unless agreement_state_descriptor.is_a? AgreementStateDescriptor
-          path = "v1/payments/billing-agreements/#{self.id}/cancel"
+          path = "v1/billing/subscriptions/#{self.id}/cancel"
           response = api.post(path, agreement_state_descriptor.to_hash, http_header)
           self.merge!(response)
           success?
@@ -2329,7 +2329,7 @@ module PayPal::SDK
 
         class << self
           def transactions(agreement_id, start_date, end_date, options = {})
-            path = "v1/payments/billing-agreements/#{agreement_id}/transactions" #?start-date=#{start_date}&end-date=#{end_date}"
+            path = "v1/billing/subscriptions/#{agreement_id}/transactions" #?start-date=#{start_date}&end-date=#{end_date}"
             options = { :start_date => start_date, :end_date => end_date }
             AgreementTransactions.new(api.get(path, options))
           end
